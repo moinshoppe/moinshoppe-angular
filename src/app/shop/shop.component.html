@@ -1,0 +1,98 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<div style="display: flex;justify-content: center;">
+	<a *ngIf="shops.length ==0" mat-button color="primary" [routerLink]="['/shops/new']">
+		<mat-icon>add_box</mat-icon> ADD DETAILS
+	</a>
+</div>
+<mat-card>
+
+</mat-card>
+
+<div *ngIf="shops.length >0 && !isLoading">
+	<mat-card *ngFor="let shop of shops">
+		<mat-card-actions>
+			<div style="display: flex;justify-content: flex-end;">
+				<small>Created By: {{getUserEmail(shop.creator)}}</small>
+			</div>
+		</mat-card-actions>
+		<mat-card-header>
+
+			<!-- <div mat-card-avatar class="example-header-image"></div> -->
+			<mat-card-title>{{shop.shopName}}</mat-card-title>
+
+			<mat-card-subtitle style="margin-top:25px;">
+				<mat-icon style="color:brown">business_center</mat-icon>{{shop.shopGSTIN}}
+			</mat-card-subtitle>
+			<mat-card-subtitle>
+				<mat-icon style="color:blue">location_on</mat-icon>{{shop.shopAddress}}
+				<!-- <div *ngFor="let add of shopAddress">
+      {{add}}<br/>
+    </div> -->
+			</mat-card-subtitle>
+
+			<mat-card-subtitle>
+				<mat-icon style="color:green">phone</mat-icon> {{shop.shopPhoneNo}}
+			</mat-card-subtitle>
+
+			<mat-card-subtitle>
+				<mat-icon style="color:red">mail_outline</mat-icon> {{shop.shopEmail}}
+			</mat-card-subtitle>
+		</mat-card-header>
+		<!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+		<mat-card-content>
+			<hr *ngIf="shop.shopConditions!=null && shop.shopConditions!=''">
+			
+			<div *ngIf="shop.shopConditions!=null && shop.shopConditions!=''">
+				<p><strong>Terms & conditions:</strong></p>
+				<ul *ngFor="let condition of shopConditions">
+					<li *ngIf="condition.length>0">{{condition}}</li>
+				</ul>
+			</div>
+			<hr *ngIf="userIsAuthenticated && userId==shop.creator">
+
+		</mat-card-content>
+		<mat-card-actions *ngIf="userIsAuthenticated && userId==shop.creator">
+			<div style="display: flex;justify-content: flex-end;">
+				<a mat-button color="primary" [routerLink]="['/shops/edit', shop._id]">
+					<mat-icon>edit</mat-icon>EDIT DETAILS
+				</a>
+			</div>
+
+		</mat-card-actions>
+	</mat-card>
+</div>
+<!-- <mat-accordion multi="true" *ngIf="shops.length >0 && !isLoading">
+	<mat-expansion-panel *ngFor="let shop of shops">
+		<mat-expansion-panel-header>
+      <div class="grid-container-3">
+        <div class="grid-shop-left">
+&#8377; {{shop.shopSellingPrice | number: '3.2-5'}}
+        </div>
+        <div class="grid-shop-left"></div>
+        <div class="grid-shop-center">
+          {{shop.shopName}} 
+        </div>
+      </div>
+     
+      </mat-expansion-panel-header>
+		<hr>
+		<div>
+			<h3>Quantity: {{shop.shopQuantity}}</h3>
+
+		</div>
+		<mat-action-row>
+			<a mat-button color="primary" [routerLink]="['/shops/edit', shop._id]">
+				<mat-icon>edit</mat-icon>EDIT
+			</a>
+			<button mat-button color="warn"
+            (click)="OnDelete(shop._id)"><mat-icon>delete</mat-icon>DELETE</button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion> -->
+
+
+<!-- <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+	(page)="onChangedPage($event)" *ngIf="shops.length >0">
+</mat-paginator> -->
+<p class="info-text mat-body-1" *ngIf="shops.length <=0 && !isLoading">No Shop details added yet!</p>

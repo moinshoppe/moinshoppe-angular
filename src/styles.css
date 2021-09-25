@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@media print {
+    /* invert the display (show/hide) properties of the main */
+    /* aplication component and the printing component       */
+  
+    app-member-view .panel{
+      display: block;
+    }
+    app-invoice-view #non-print {
+      visibility: hidden;
+    }
+    app-header {
+      display: none;
+    }
+  }

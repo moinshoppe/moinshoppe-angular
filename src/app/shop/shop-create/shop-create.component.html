@@ -1,0 +1,48 @@
+<mat-card>
+	<mat-spinner *ngIf="isLoading"></mat-spinner>
+	<form [formGroup]="form" (submit)="onSaveShop()" *ngIf="!isLoading">
+		<mat-form-field>
+			<mat-label>My Shop Name</mat-label>
+			<input matInput name="shopName" formControlName="shopName" type="text" required>
+			<mat-error *ngIf="form.get('shopName').invalid">Please enter a Shop Name</mat-error>
+
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>My Shop Phone No</mat-label>
+			<input matInput name="shopPhoneNo" formControlName="shopPhoneNo" type="text"
+       required >
+			<mat-error *ngIf="form.get('shopPhoneNo').invalid || phoneNoError">Please enter valid 10 digit Phone No
+			</mat-error>
+
+
+			<!-- <div *ngIf="phoneNoError">
+<mat-error>Please enter a Correct Phone No</mat-error>
+      </div> -->
+
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>My Shop E-mail</mat-label>
+			<input matInput name="shopEmail" formControlName="shopEmail" type="email" >
+			<mat-error *ngIf="form.get('shopEmail').invalid">Please enter valid Email address</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>My Shop Address</mat-label>
+			<textarea matInput rows="6" name="shopAddress" formControlName="shopAddress" ></textarea>
+
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>My Shop GSTIN</mat-label>
+			<input matInput name="shopGSTIN" formControlName="shopGSTIN" type="text">
+
+		</mat-form-field>
+<mat-form-field>
+			<mat-label>Terms & Conditions</mat-label>
+			<textarea matInput rows="6" name="shopConditions" formControlName="shopConditions" ></textarea>
+
+		</mat-form-field>
+
+			<button mat-raised-button color="primary" type="submit" > {{editMode? 'Update' : 'Add'}} Shop Details</button>
+      <button mat-raised-button style="margin-left:10px;" (click)="onCancel()" color="accent" type="submit" > Cancel</button>
+	</form>
+</mat-card>

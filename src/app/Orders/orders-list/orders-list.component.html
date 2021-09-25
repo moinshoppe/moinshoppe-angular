@@ -1,0 +1,136 @@
+<div style="display: flex;
+justify-content: flex-end;
+">
+	<button mat-raised-button color="accent" (click)="onAddOrder_route()" type="button">Add Order</button>
+</div>
+<div>
+	<mat-card>
+		<form [formGroup]="form" (submit)="onSearchOrder()">
+			<div style="display: flex;
+  justify-content: center;
+">
+				<mat-form-field>
+					<mat-label>Search Orders</mat-label>
+					<input matInput type="text" formControlName="searchText">
+    </mat-form-field>
+					<button style="max-height:45px;" mat-raised-button color="primary" type="submit" ><mat-icon>search</mat-icon></button>
+			</div>
+			<div style="display: flex;
+  justify-content: center;
+">
+				<mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="searchType"
+					(change)="onSearchOrder()">
+					<mat-button-toggle value="Buy">Buy</mat-button-toggle>
+					<mat-button-toggle value="Sell">Sell</mat-button-toggle>
+					<mat-button-toggle value="All"> All</mat-button-toggle>
+				</mat-button-toggle-group>
+			</div>
+		</form>
+
+	</mat-card>
+
+</div>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<p class="info-text mat-body-1" *ngIf="orders.length <=0 && !isLoading">No Orders added yet!</p>
+<mat-accordion multi="true" *ngIf="orders.length >0 && !isLoading">
+	<mat-expansion-panel *ngFor="let order of orders">
+		<mat-expansion-panel-header
+			[ngStyle]="{'background-color':order.businessType === 'Sell' ? '#0080005c' : '#ffff' }">
+			<div style="width:100%;">
+				<div style="display: flex;justify-content: space-around;">
+					<div>{{order.clientPhoneNo}} <br>
+						{{order.clientName}}</div>
+					<div>Total: &#8377; {{order.totalCost }} <br>
+									<div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid>0"
+										style="color:red;">Balance: &#8377; {{order.totalCost-order.amountPaid }}</div>
+									<div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid<0"
+										style="color:green;">Advance: &#8377; {{-1*(order.totalCost-order.amountPaid)}}</div></div>
+					
+				</div>
+			</div>
+			<!-- <div class="grid-container-3">
+				<div class="grid-item-left">
+					{{order.clientPhoneNo}} <br>
+			{{order.clientName}}
+        </div>
+					<div class="grid-item-left"></div>
+					<div class="grid-item-left">
+						Total: &#8377; {{order.totalCost }} <br>
+						<div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid>0"
+							style="color:red;">Balance: &#8377; {{order.totalCost-order.amountPaid }}</div>
+						<div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid<0"
+							style="color:green;">Advance: &#8377; {{-1*(order.totalCost-order.amountPaid)}}</div>
+					</div>
+				</div> -->
+				<!-- {{order.clientPhoneNo}} <br>
+			{{order.clientName}}
+			<span style="margin-left:100px;">
+       Total: &#8377; {{order.totalCost }} <br>
+       <div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid>0"  style="color:red;">Balance: &#8377; {{order.totalCost-order.amountPaid }}</div>
+       <div *ngIf="order.totalCost-order.amountPaid!=0  && order.totalCost-order.amountPaid<0"  style="color:green;">Advance: &#8377; {{-1*(order.totalCost-order.amountPaid)}}</div>
+      </span> -->
+		</mat-expansion-panel-header>
+		<hr>
+		<!-- <mat-grid-list cols="2" rowHeight="20px">
+	<mat-grid-tile>Item Name</mat-grid-tile>
+	<mat-grid-tile>Cost</mat-grid-tile>
+	<mat-grid-tile>Item Name1</mat-grid-tile>
+	<mat-grid-tile>Cost1</mat-grid-tile>
+</mat-grid-list> -->
+<div style="display: flex;justify-content: flex-end;">
+	<small>Created By: {{getUserEmail(order.creator)}}</small>
+</div>
+		<div>
+			<h3>Bill No: {{order.billNo}}</h3>
+		</div>
+		<div>
+			<mat-grid-list cols="3" rowHeight="20px" style="background-color:#673ab7;color:white">
+				<mat-grid-tile>Item Name</mat-grid-tile>
+				<!-- <mat-grid-tile>Price</mat-grid-tile> -->
+				<mat-grid-tile>Quantity</mat-grid-tile>
+				<mat-grid-tile>Cost</mat-grid-tile>
+			</mat-grid-list>
+			<mat-grid-list cols="3" rowHeight="20px" *ngFor="let listItem of order.listOfItems">
+				<mat-grid-tile>{{listItem.itemName}}</mat-grid-tile>
+				<!-- <mat-grid-tile>{{listItem.unitprice}}</mat-grid-tile> -->
+				<mat-grid-tile>{{listItem.quantity}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="order.businessType=='Sell'">{{listItem.spCost}}</mat-grid-tile>
+				<mat-grid-tile *ngIf="order.businessType=='Buy'">{{listItem.cpCost}}</mat-grid-tile>
+
+
+			</mat-grid-list>
+
+			<p style="color:green">Amount Paid: <span> &#8377;</span> {{order.amountPaid}}</p>
+			<p>Purchased Date:
+
+				{{dateConverter(order.purchasedDate)}}</p>
+			<p>Last Updated Date:
+				{{dateConverter(order.lastUpdatedDate)}}
+			</p>
+			<h3>Transactions:</h3>
+			<!-- <p>{{order.transaction}}</p> -->
+			<p [innerHTML]="order.transaction"></p>
+		</div>
+		<mat-action-row >
+
+			<a mat-button *ngIf="order.businessType=='Sell' && order.isInvoiceCreated && order.relatedInvoiceId"
+				style="color:green" [routerLink]="['/invoices/view', order.relatedInvoiceId]">
+				<mat-icon>notes</mat-icon>VIEW
+			</a>
+			<a mat-button style="color:#2fa4e7" *ngIf="order.businessType=='Sell' && userIsAuthenticated && userId==order.creator" (click)="OnOrderAdd(order)">
+				<mat-icon>receipt</mat-icon>INVOICE
+			</a>
+			<a *ngIf="userIsAuthenticated && userId==order.creator" mat-button color="primary" [routerLink]="['/orders/edit', order._id]">
+				<mat-icon>edit</mat-icon>EDIT
+			</a>
+			<button *ngIf="userIsAuthenticated && userId==order.creator" mat-button color="warn" (click)="OnDelete(order._id,order.relatedInvoiceId)">
+        <mat-icon>delete</mat-icon>DELETE
+        </button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>
+
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+	(page)="onChangedPage($event)" *ngIf="orders.length >0">
+</mat-paginator>

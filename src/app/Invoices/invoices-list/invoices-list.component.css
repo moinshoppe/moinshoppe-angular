@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  margin-top: 1rem;
+}
+
+.info-text {
+  text-align: center;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+mat-paginator {
+  margin-top: 1rem;
+}
+
+.myheaderStyle{
+ background-color:#404040;
+ color:white;
+ font-weight: bold;
+
+}

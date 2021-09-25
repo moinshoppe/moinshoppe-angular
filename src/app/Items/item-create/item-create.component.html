@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+   <form [formGroup]="form" (submit)="onSaveItem()" *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>Item Name</mat-label>
+       <input matInput name="itemName" formControlName="itemName" type="text" required>
+        <mat-error *ngIf="form.get('itemName').invalid">Please enter a Item Name</mat-error>
+    </mat-form-field>
+  <mat-form-field>
+    <mat-label>Item Selling Price</mat-label>
+        <input matInput name="itemSellingPrice" formControlName="itemSellingPrice" type="number" required>
+        <mat-error *ngIf="form.get('itemSellingPrice').invalid">Please enter a Item Selling Price</mat-error>
+    </mat-form-field>
+<mat-form-field>
+    <mat-label>Item Cost Price</mat-label>
+        <input matInput name="itemCostPrice" formControlName="itemCostPrice" type="number" >
+        <!-- <mat-error *ngIf="form.get('itemCostPrice').invalid">Please enter a Item Price</mat-error> -->
+    </mat-form-field>
+    <mat-form-field>
+    <mat-label>Item Quantity</mat-label>
+        <input matInput name="itemQuantity" formControlName="itemQuantity" type="number" >
+        <!-- <mat-error *ngIf="form.get('itemCostPrice').invalid">Please enter a Item Price</mat-error> -->
+    </mat-form-field>
+    <mat-form-field>
+    <mat-label>Item HSN Code</mat-label>
+        <input matInput name="itemHSN" formControlName="itemHSN" type="text" >
+        <!-- <mat-error *ngIf="form.get('itemHSN').invalid">Please enter a Item HSN Code</mat-error> -->
+    </mat-form-field>
+ <button mat-raised-button color="primary" type="submit" > {{editMode? 'Update' : 'Add'}} Item</button>
+ <button mat-raised-button style="margin-left:10px;" (click)="onCancel()" color="accent" type="submit" > Cancel</button>
+    </form>
+</mat-card>
+

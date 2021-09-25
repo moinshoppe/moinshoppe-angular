@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+   <form [formGroup]="form" (submit)="onSaveInvoice()" *ngIf="!isLoading">
+    
+  <mat-form-field>
+    <mat-label>SGST</mat-label>
+        <input matInput name="SGST" formControlName="SGST" type="number">
+        <mat-error *ngIf="form.get('SGST').invalid">Please enter a Invoice Selling Price</mat-error>
+    </mat-form-field>
+	<mat-form-field>
+    <mat-label>CGST</mat-label>
+        <input matInput name="CGST" formControlName="CGST" type="number">
+        <mat-error *ngIf="form.get('CGST').invalid">Please enter a Invoice Selling Price</mat-error>
+    </mat-form-field>
+	<mat-form-field>
+    <mat-label>IGST</mat-label>
+        <input matInput name="IGST" formControlName="IGST" type="number">
+        <mat-error *ngIf="form.get('IGST').invalid">Please enter a Invoice Selling Price</mat-error>
+    </mat-form-field>
+	<mat-form-field>
+    <mat-label>E-Way Bill No.</mat-label>
+        <input matInput name="eWayBillNo" formControlName="eWayBillNo" type="number">
+        <mat-error *ngIf="form.get('eWayBillNo').invalid">Please enter a Invoice Selling Price</mat-error>
+    </mat-form-field>
+<mat-form-field>
+    <mat-label>Vehicle No</mat-label>
+        <input matInput name="vehicleNo" formControlName="vehicleNo" type="text" >
+        <!-- <mat-error *ngIf="form.get('itemCostPrice').invalid">Please enter a Invoice Price</mat-error> -->
+    </mat-form-field>
+    <mat-form-field>
+    <mat-label>Transporter Name</mat-label>
+        <input matInput name="transporterName" formControlName="transporterName" type="text" >
+        <!-- <mat-error *ngIf="form.get('itemCostPrice').invalid">Please enter a Invoice Price</mat-error> -->
+    </mat-form-field>
+   
+ <button mat-raised-button color="primary" type="submit" > {{editMode? 'Update' : 'Add'}} Invoice</button>
+ <button mat-raised-button style="margin-left:10px;" (click)="onCancel()" color="accent" type="submit" > Cancel</button>
+    </form>
+</mat-card>
+

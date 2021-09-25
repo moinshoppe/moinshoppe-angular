@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'moinshoppe1-angular'`, () => {
+  it(`should have as title 'moinshoppe-angular'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('moinshoppe1-angular');
+    expect(app.title).toEqual('moinshoppe-angular');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('moinshoppe1-angular app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('moinshoppe-angular app is running!');
   });
 });

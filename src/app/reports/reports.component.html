@@ -1,0 +1,22 @@
+<mat-card>
+	<mat-spinner *ngIf="isLoading"></mat-spinner>
+	<form [formGroup]="form" (submit)="onSubmitReport()" *ngIf="!isLoading">
+		<mat-form-field>
+			<mat-label>Select Report</mat-label>
+				<mat-select formControlName="reportName">
+					<mat-option value="Invoices">Invoices</mat-option>
+					<mat-option value="Non-GST-Bills">Non-GST-Bills</mat-option>
+					<mat-option value="Purchase History">Purchase History</mat-option>
+					<mat-option value="Advance/Balance Payment">Advance/Balance Payment</mat-option>
+					<!-- <mat-option value="Customers">Customers</mat-option>
+					<mat-option value="Items">Items</mat-option> -->
+					<mat-option value="Profit">Profit</mat-option>
+				</mat-select>
+			<mat-error *ngIf="form.get('reportName').invalid">Please select a Report</mat-error>
+
+		</mat-form-field>
+	<button mat-raised-button color="primary" type="submit" > Submit </button>
+	<button mat-raised-button style="margin-left:10px;" (click)="onCancel()" color="accent" type="button" > Cancel</button>
+
+	</form>
+</mat-card>

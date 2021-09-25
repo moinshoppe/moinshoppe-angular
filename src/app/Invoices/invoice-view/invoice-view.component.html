@@ -1,0 +1,156 @@
+
+	<div>
+		<!-- <mat-grid-list cols="2" rowHeight="20px">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile >2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>
+</mat-grid-list>
+
+
+
+<div class="grid-container">
+  <div class="grid-item">1</div>
+  <div class="grid-item" *ngIf="false">2</div>
+  <div class="grid-item">3</div>  
+  <div class="grid-item">4</div>
+  <div class="grid-item" *ngIf="false">5</div>
+  <div class="grid-item">6</div>  
+  <div class="grid-item">7</div>
+  <div class="grid-item" *ngIf="false">8</div>
+  <div class="grid-item">9</div>  
+</div> -->
+		<div class="mainpage">
+
+			<h1 style="text-align:center;margin-top:20px"><strong>TAX INVOICE</strong></h1>
+			<div class="grid-container-2">
+				<div class="grid-item-left">
+					<p><strong>{{shop.shopName}}</strong> <br>
+						<span *ngFor="let add of shopAddress">
+      {{add}}<br/>
+    </span><br>
+    {{shop.shopPhoneNo}} <br>
+    {{shop.shopEmail}}
+					</p>
+						<P><strong>GSTIN:</strong> {{shop.shopGSTIN}}<br>
+							<strong *ngIf="shop.shopAddress">State:</strong> {{shopAddress[shopAddress.length-1]}}</P>
+				</div>
+				<div class="grid-item-right">
+					<!-- <div style="text-align:right!important"> -->
+					<P>
+						{{dateConverter(invoice?.lastUpdatedDate)}}<br>
+						<strong>Invoice No:</strong> {{invoice?.invoiceNo}}</P>
+					<!-- </div> -->
+				</div>
+			</div>
+			<hr class="myheaderStyle">
+			<div class="grid-container-3">
+				<div class="grid-item-left">
+					<p>
+						<strong>Customer Name:</strong><br>{{order?.clientName}}<br><br>
+						<strong>Customer GSTIN:</strong><br>{{order?.clientGSTIN}}
+    </p>
+				</div>
+				<div class="grid-item-left">
+					<p><strong>Billing Address:</strong><br>
+{{order?.clientAddress}}
+</p>
+				</div>
+				<div class="grid-item-left">
+					<p><strong>Shipping Address:</strong><br>
+{{order?.clientAddress}}
+</p>
+				</div>
+			</div>
+			<hr class="myheaderStyle">
+			<div class="grid-container-2">
+
+				<div class="grid-item-left">
+					<p>
+						<strong>E-Way Bill No.</strong> {{invoice?.eWayBillNo}} <br>
+						<strong>Place of Supply:</strong> {{shopAddress[shopAddress.length-1]}} <br><br>
+						<strong>Vehicle No.</strong> {{invoice?.vehicleNo}} <br>
+						<strong>Transporter Name:</strong> {{invoice?.transporterName}}
+					</p>
+				</div>
+			</div>
+
+			<div class="grid-container-1">
+				<div class="grid-item-center">
+					<div>
+						<table>
+							<tr class="rowStyle myheaderStyle">
+								<th>S.No#</th>
+								<th>Products</th>
+								<th>HSN/SAC</th>
+								<th>Quantity</th>
+								<th>Rate/Product</th>
+								<th>Amount</th>
+							</tr>
+							<tr *ngFor="let listItem of order?.listOfItems;index as i">
+								<td class="rowStyle">{{i+1}}</td>
+								<td class="rowStyle" style="text-align: left;">{{listItem.itemName}}</td>
+								<td class="rowStyle" style="text-align: right;">{{invoice.HSNcode}}</td>
+								<td class="rowStyle" style="text-align: right;">{{listItem.quantity}}</td>
+								<td class="rowStyle" *ngIf="order.businessType=='Sell'" style="text-align: right;">
+									{{listItem.itemSellingPrice}}
+								</td>
+								<td class="rowStyle" *ngIf="order.businessType=='Sell'" style="text-align: right;">
+									{{listItem.spCost}}</td>
+
+							</tr>
+
+
+						</table>
+					</div>
+
+
+				</div>
+			</div>
+
+			<div class="grid-container-4">
+				<div class="grid-item-left"></div>
+				<div class="grid-item-left"></div>
+				<div class="grid-item-left"></div>
+				<div class="grid-item-left">
+					<p><strong>Cost: </strong> {{totalCost_order}}</p>
+					<p><strong> SGST: </strong> {{SGST_Val}}</p>
+					<p><strong> CGST: </strong> {{CGST_Val}}</p>
+					<p><strong> IGST: </strong> {{IGST_Val}}</p>
+					<p><strong> Grand Total: </strong> {{getTotalCost()}}</p>
+					<p><strong> Grand Total (approx): &#8377; </strong> {{getTotalCostApprox()}}</p>
+					<p><strong>Grand Total (in words):</strong> {{numberInWords(getTotalCostApprox())| titlecase}}</p>
+				</div>
+			</div>
+
+			<div class="grid-container-3">
+				<div class="grid-item-left">
+					<div *ngIf="shop.shopConditions!=null && shop.shopConditions!=''">
+						<p><strong>Terms & conditions:</strong></p>
+						<ul *ngFor="let condition of shopConditions">
+							<li *ngIf="condition.length>0">{{condition}}</li>
+						</ul>
+					</div>
+				</div>
+				<div class="grid-item-right"></div>
+				<div class="grid-item-center">
+
+
+
+					<p><strong>{{shop.shopName}}</strong><br><br><br>Authorised Signatory</p>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- <button mat-raised-button color="primary" (click)="printPage()"> Print</button> -->
+		<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->
+
+    	<div style="margin-top:15px;margin-bottom:50px;margin-left: 50px;" id="non-print">
+				<button mat-raised-button (click)="printPage()" color="primary"><mat-icon>print</mat-icon> Print</button>
+					<button mat-raised-button color="accent" (click)="onCancel()" style="margin-left:5px;">Cancel</button>
+		</div>
+
+	</div>

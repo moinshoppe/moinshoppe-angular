@@ -1,0 +1,32 @@
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.active {
+  background: #673ab7;
+  color: white;
+}
+
+.active:hover{
+  color:black;
+}
+
+ul{
+  list-style: none;
+  padding: 0;
+  margin:0;
+}
+
+a{
+    text-decoration: none;
+    color:white;
+}
+
+.spacer{
+    flex:1 1 auto;
+}
+
+ul{
+  display: flex;
+}

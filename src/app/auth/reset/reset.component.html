@@ -1,0 +1,30 @@
+<mat-card>
+	<form [formGroup]="form" (submit)="onSubmitResetPassword()">
+		<mat-form-field>
+			<input matInput placeholder="Old Password" formControlName="oldPassword" [errorStateMatcher]="confirmErrorMatcher" [type]="hide0 ? 'password' : 'text'">
+			<button type="button" mat-icon-button matSuffix (click)="hide0 = !hide0" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide0"><mat-icon>{{hide0 ? 'visibility_off' : 'visibility'}}</mat-icon></button>
+			<mat-error *ngIf="form.get('oldPassword').invalid">Please enter a Old Password</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<input matInput placeholder="New Password" formControlName="password" [errorStateMatcher]="passwordErrorMatcher" [type]="hide ? 'password' : 'text'">
+			<button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide"><mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon></button>
+			<mat-error>{{ getErrorMessage('password') }}</mat-error>
+		</mat-form-field>
+
+		<mat-form-field>
+			<input matInput placeholder="Confirm New Password" formControlName="confirm" [errorStateMatcher]="confirmErrorMatcher" [type]="hide1 ? 'password' : 'text'">
+			<button type="button" mat-icon-button matSuffix (click)="hide1 = !hide1" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide1"><mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon></button>
+			<mat-error>{{ getErrorMessage('confirm') }}</mat-error>
+		</mat-form-field>
+		<button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" > Reset Password </button>
+		<button
+        mat-raised-button
+        style="margin-left:10px;"
+        (click)="onCancel()"
+        color="accent"
+        type="button"
+      >
+        Cancel
+      </button>
+	</form>
+</mat-card>

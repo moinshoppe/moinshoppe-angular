@@ -1,0 +1,204 @@
+<!--<mat-spinner *ngIf="isLoading"></mat-spinner>-->
+<mat-card>
+	<form [formGroup]="orderForm" (submit)="onSubmit()">
+		<div style="margin-bottom:10px;">
+			<button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!orderForm.valid"
+      >
+      {{editMode? 'Update' : 'Add'}} Order
+      </button>
+			<button
+        mat-raised-button
+        style="margin-left:10px;"
+        (click)="onCancel()"
+        color="accent"
+        type="submit"
+      >
+        Cancel
+      </button>
+		</div>
+
+		<mat-form-field>
+			<mat-label>Client Name</mat-label>
+			<input
+        matInput
+        name="clientName"
+        formControlName="clientName"
+        type="text"
+      />
+			<!-- <mat-error *ngIf="orderForm.get('clientName').invalid">Please enter a Client Name</mat-error> -->
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Phone No</mat-label>
+			<input
+        matInput
+        name="clientPhoneNo"
+        formControlName="clientPhoneNo"
+        type="text"
+        required
+      />
+			<mat-error *ngIf="orderForm.get('clientPhoneNo').invalid">Please enter valid 10 digit Phone No</mat-error>
+		</mat-form-field>
+		<div>
+			<mat-checkbox (change)="toggle($event)">+Invoice Details</mat-checkbox>
+		</div>
+		<div [hidden]="!checkBox_Bool">
+			<mat-form-field>
+				<mat-label>Client Address</mat-label>
+				<textarea
+          matInput
+          rows="4"
+          name="clientAddress"
+          formControlName="clientAddress"
+        ></textarea>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Client GSTIN</mat-label>
+				<input
+          matInput
+          name="clientGSTIN"
+          formControlName="clientGSTIN"
+          type="text"
+        />
+      </mat-form-field>
+		</div>
+
+		<h1>
+			Total Cost: &#8377; {{totalCost | number: '3.2-5'}}
+			<button mat-mini-fab (click)="onRefresh()"
+      [disabled]="orderForm.value.listOfItems<=0"
+      [color]="refreshButton?'accent':'primary'" type="button">
+        <mat-icon>refresh</mat-icon>
+      </button>
+		</h1>
+
+		<div style="margin-bottom:15px;">
+			<mat-label>Payment Type:</mat-label>
+			<mat-radio-group formControlName="paymentType" #paymentType>
+				<mat-radio-button (click)="getRadioButtonPayment('Cash')" value="Cash">Cash
+				</mat-radio-button>
+				<mat-radio-button (click)="getRadioButtonPayment('Card')" value="Card">Card
+				</mat-radio-button>
+				<mat-radio-button (click)="getRadioButtonPayment('UPI')" value="UPI">UPI
+				</mat-radio-button>
+			</mat-radio-group>
+		</div>
+		<mat-form-field>
+			<mat-label>Amount Paid</mat-label>
+			<input
+        matInput
+        name="amountPaid"
+        formControlName="amountPaid"
+        type="number"
+      />
+			<mat-error *ngIf="orderForm.get('amountPaid').invalid">Please enter the Amount Paid</mat-error>
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Purchased Date</mat-label>
+			<input
+        matInput
+        name="purchasedDate"
+        formControlName="purchasedDate"
+        type="date"
+      />
+			<mat-error *ngIf="orderForm.get('purchasedDate').invalid">Please enter the Purchased Date</mat-error>
+		</mat-form-field>
+		<div style="margin-bottom:15px;">
+			<mat-label>Business Type:</mat-label>
+			<mat-radio-group formControlName="businessType" #businessType>
+				<mat-radio-button (click)="getRadioButton('Buy')" #buy value="Buy">Buy
+				</mat-radio-button>
+				<mat-radio-button (click)="getRadioButton('Sell')" #sell value="Sell">Sell
+				</mat-radio-button>
+			</mat-radio-group>
+		</div>
+
+		<div formArrayName="listOfItems">
+			<div *ngFor="let listOfItemsCtrl of controls; let i = index" [formGroupName]="i">
+				<mat-card>
+					<mat-grid-list cols="4" rowHeight="70px">
+						<mat-grid-tile rowspan="1" colspan="3">
+							<!-- <mat-form-field>
+                <mat-label>Items</mat-label>
+                <mat-select
+                  formControlName="unititem"
+                  #choosedValue
+                  (valueChange)="doSomething1(choosedValue.value,i)"
+                >
+                  <mat-option>--</mat-option>
+                  <mat-option
+                    *ngFor="let item of items"
+                    [value]="item.itemName"
+                  >{{item.itemName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+							<mat-form-field class="example-full-width">
+								<input type="text" placeholder="Item" aria-label="Item" matInput formControlName = "unititem" [matAutocomplete]="auto" >
+								<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+									(optionSelected)="doSomething1($event,i)">
+									<mat-option *ngFor="let option of filteredOptions[i] | async" [value]="option">
+										{{option}}
+									</mat-option>
+								</mat-autocomplete>
+							</mat-form-field>
+						</mat-grid-tile>
+						<mat-grid-tile rowspan="2" colspan="1">
+
+							<mat-form-field>
+								<mat-label>Amount</mat-label>
+								<input
+                  matInput
+                  name="amount"
+                  formControlName="amount"
+                  type="number"
+                />
+
+              </mat-form-field>
+						</mat-grid-tile>
+						<mat-grid-tile rowspan="1" colspan="3">
+							<mat-form-field>
+								<mat-label>Quantity</mat-label>
+								<input
+                  matInput
+                  name="quantity"
+                  formControlName="quantity"
+                  type="number"
+                  #choosedValue1
+                  (valueChange)="doSomething2(choosedValue1.value,i)"
+                  (change)="doSomething2(choosedValue1.value,i)"
+                  (focusout)="doSomething2(choosedValue1.value,i)"
+                />
+								<!-- <mat-error *ngIf="quantity.hasError('required')">Please enter a Client Phone No</mat-error> -->
+							</mat-form-field>
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<button
+            mat-raised-button
+            type="button"
+            (click)="onDelete_listOfItems(i)"
+            color="warn"
+          >
+            Delete Item
+          </button>
+				</mat-card>
+			</div>
+		</div>
+
+		<button
+      mat-raised-button
+      color="primary"
+      (click)="onAdd_listOfItems()"
+      type="button"
+      style="margin-top:15px;"
+      [disabled]="billingNotStarted"
+    >
+      Add Item
+    </button>
+	</form>
+</mat-card>

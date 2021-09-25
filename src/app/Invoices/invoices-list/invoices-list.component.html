@@ -1,0 +1,48 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<p class="info-text mat-body-1" *ngIf="invoices.length <=0 && !isLoading">No Invoices added yet!</p>
+
+<mat-accordion multi="true" *ngIf="invoices.length >0 && !isLoading">
+	<mat-expansion-panel *ngFor="let invoice of invoices">
+		<mat-expansion-panel-header>
+			{{invoice.invoiceNo}} (OrderNo: {{invoice.orderBillNo}})
+		</mat-expansion-panel-header>
+		<hr>
+    <div style="display: flex;justify-content: flex-end;">
+	<small>Created By: {{getUserEmail(invoice.creator)}}</small>
+</div>
+		<div>
+			<p>Dated On: {{dateConverter(invoice.lastUpdatedDate)}}</p>
+			<mat-grid-list cols="2" rowHeight="30px">
+				<mat-grid-tile class="myheaderStyle">HSN Code:</mat-grid-tile>
+				<mat-grid-tile> {{invoice.HSNcode}}</mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">SGST:</mat-grid-tile>
+				<mat-grid-tile>{{invoice.SGST}} %</mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">CGST:</mat-grid-tile>
+				<mat-grid-tile>{{invoice.CGST}} %</mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">IGST:</mat-grid-tile>
+				<mat-grid-tile>{{invoice.IGST}} %</mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">eWayBillNo:</mat-grid-tile>
+				<mat-grid-tile><strong>{{invoice.eWayBillNo}}</strong></mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">Vehicle No:</mat-grid-tile>
+				<mat-grid-tile>{{invoice.vehicleNo}}</mat-grid-tile>
+				<mat-grid-tile class="myheaderStyle">Transporter Name:</mat-grid-tile>
+				<mat-grid-tile>{{invoice.transporterName}}</mat-grid-tile>
+			</mat-grid-list>
+
+		</div>
+		 <mat-action-row >
+			<a mat-button *ngIf="invoice.orderId" style="color:green" [routerLink]="['/invoices/view', invoice._id]">
+				<mat-icon>notes</mat-icon>VIEW
+			</a>
+			<a *ngIf="userIsAuthenticated && userId==invoice.creator" mat-button color="primary" [routerLink]="['/invoices/edit', invoice._id]">
+				<mat-icon>edit</mat-icon>EDIT
+			</a>
+			<button *ngIf="userIsAuthenticated && userId==invoice.creator" mat-button color="warn"
+            (click)="OnDelete(invoice._id,invoice.orderId,invoice.invoiceNo)"><mat-icon>delete</mat-icon>DELETE</button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>
+
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+	(page)="onChangedPage($event)" *ngIf="invoices.length >0">
+</mat-paginator>

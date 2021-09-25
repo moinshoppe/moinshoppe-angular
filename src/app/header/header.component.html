@@ -1,0 +1,64 @@
+<mat-toolbar color="primary" (window:resize)="onResize($event)">
+  <span class="fill-remaining-space" *ngIf="userIsAuthenticated && breakpoint==1">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/items/new" routerLinkActive="active">New Item</button>
+      <!-- <button  mat-menu-item routerLink="/orders/new" routerLinkActive="active">New Bill</button> -->
+      <button mat-menu-item routerLink="/orders/all" routerLinkActive="active">Orders</button>
+      <!-- <button  mat-menu-item routerLink="/customers/new" routerLinkActive="active">New Customer</button> -->
+      <button mat-menu-item routerLink="/customers/all" routerLinkActive="active">Customers</button>
+      <button mat-menu-item routerLink="/invoices/all" routerLinkActive="active">Invoices</button>
+      <button mat-menu-item routerLink="/shops/all" routerLinkActive="active">My Shop</button>
+      <button mat-menu-item routerLink="/reports" routerLinkActive="active">Reports</button>
+      <button mat-menu-item routerLink="/reset" routerLinkActive="active">Reset Password</button>
+    </mat-menu>
+  </span>
+  <span class="fill-remaining-space"><a routerLink="/items">Moin Shoppe</a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/items/new" routerLinkActive="mat-accent">
+        +Item
+      </button>
+    </li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/orders/all" routerLinkActive="mat-accent">
+        Orders
+      </button>
+    </li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/customers/all" routerLinkActive="mat-accent">
+        Customers
+      </button>
+    </li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/invoices/all" routerLinkActive="mat-accent">
+        Invoices
+      </button>
+    </li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/shops/all" routerLinkActive="mat-accent">
+        My Shop
+      </button>
+    </li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+			<button mat-button routerLink="/reports" routerLinkActive="mat-accent">
+        Reports
+      </button>
+		</li>
+    <li *ngIf="userIsAuthenticated && breakpoint==4">
+      <button mat-button routerLink="/reset" routerLinkActive="mat-accent">
+        Reset Password
+      </button>
+    </li>
+    <!-- <li *ngIf="!userIsAuthenticated"><a mat-button routerLink="/login"
+				routerLinkActive="mat-accent"><b>Login</b></a></li>
+		<li *ngIf="!userIsAuthenticated"><a mat-button routerLink="/signup"
+				routerLinkActive="mat-accent"><b>Signup</b></a></li> -->
+    <li *ngIf="userIsAuthenticated"><button mat-button (click)="onLogout()"><b>Logout</b></button></li>
+  </ul>
+</mat-toolbar>
+<small *ngIf="userIsAuthenticated">Welcome {{userEmail}}!</small>
+<!-- <small *ngIf="userIsAuthenticated"><mat-icon>person_pin_circle</mat-icon> {{userEmail}}</small> -->

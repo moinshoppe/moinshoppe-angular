@@ -1,0 +1,60 @@
+<div style="display: flex;
+justify-content: flex-end;
+">
+	<button mat-raised-button color="accent" (click)="onAddCustomer()" type="button">Add Customer</button>
+</div>
+<mat-card>
+	<form [formGroup]="form" (submit)="onSearchCustomer()">
+		<div style="display: flex;
+justify-content: center;
+">
+			<mat-form-field>
+				<mat-label>Search Customers</mat-label>
+				<input matInput type="text" formControlName="searchText">
+</mat-form-field>
+				<button style="max-height:45px;" mat-raised-button color="primary" type="submit" ><mat-icon>search</mat-icon></button>
+		</div>
+
+	</form>
+
+</mat-card>
+
+
+<mat-accordion multi="true" *ngIf="customers.length >0 && !isLoading">
+	<mat-expansion-panel *ngFor="let customer of customers">
+		<mat-expansion-panel-header>{{customer.customerPhoneNo}}
+			<span style="margin-left:50px;">
+        {{customer.customerName}}
+      </span></mat-expansion-panel-header>
+		<hr *ngIf="customer.customerAddress || customer.customerEmail">
+    <div style="display: flex;justify-content: flex-end;">
+	<small>Created By: {{getUserEmail(customer.creator)}}</small>
+</div>
+		<div>
+			<p *ngIf="customer.customerAddress">{{customer.customerAddress}}</p>
+			<p *ngIf="customer.customerEmail">{{customer.customerEmail}}</p>
+			<p *ngIf="customer.customerGSTIN"><strong>GSTIN: {{customer.customerGSTIN}}</strong></p>
+
+		</div>
+		<mat-action-row >
+			<button mat-button style="color:green"
+            (click)="OnOrderAdd(customer)"><mat-icon>shopping_cart</mat-icon>+ORDER</button>
+			<button mat-button
+            (click)="OnSelectCustomersOrderList(customer)"><mat-icon>list_alt</mat-icon>LIST</button>
+			<a *ngIf="userIsAuthenticated && userId==customer.creator" mat-button color="primary" [routerLink]="['/customers/edit', customer._id]">
+				<mat-icon>edit</mat-icon>EDIT
+			</a>
+			<button *ngIf="userIsAuthenticated && userId==customer.creator" mat-button color="warn"
+            (click)="OnDelete(customer._id,customer.customerName)"><mat-icon>delete</mat-icon>DEL</button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>
+
+
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+	(page)="onChangedPage($event)" *ngIf="customers.length >0">
+</mat-paginator>
+
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<p class="info-text mat-body-1" *ngIf="customers.length <=0 && !isLoading">No Customers added yet!</p>
